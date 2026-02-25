@@ -1,6 +1,6 @@
 import type { Session } from '../sync/syncEngine'
 import type { NotificationChannel } from '../notifications/notificationTypes'
-import { getAgentName, getSessionName } from '../notifications/sessionInfo'
+import { getSessionName } from '../notifications/sessionInfo'
 import type { SSEManager } from '../sse/sseManager'
 import type { VisibilityTracker } from '../visibility/visibilityTracker'
 import type { PushPayload, PushService } from './pushService'
@@ -59,7 +59,7 @@ export class PushNotificationChannel implements NotificationChannel {
             return
         }
 
-        const agentName = getAgentName(session)
+        const agentName = 'Claude'
         const name = getSessionName(session)
 
         const payload: PushPayload = {

@@ -12,8 +12,8 @@ import { startHookServer } from '@/claude/utils/startHookServer';
 import { generateHookSettingsFile, cleanupHookSettingsFile } from '@/modules/common/hooks/generateHookSettings';
 import { registerKillSessionHandler } from './registerKillSessionHandler';
 import type { Session } from './session';
-import { bootstrapSession } from '@/agent/sessionFactory';
-import { createModeChangeHandler, createRunnerLifecycle, setControlledByUser } from '@/agent/runnerLifecycle';
+import { bootstrapSession } from '@/claude/sessionFactory';
+import { createModeChangeHandler, createRunnerLifecycle, setControlledByUser } from '@/claude/runnerLifecycle';
 import { isModelModeAllowed, isPermissionModeAllowed } from '@hapi/protocol';
 import { ModelModeSchema, PermissionModeSchema } from '@hapi/protocol/schemas';
 import { formatMessageWithAttachments } from '@/utils/attachmentFormatter';
@@ -46,7 +46,6 @@ export async function runClaude(options: StartOptions = {}): Promise<void> {
 
     const initialState: AgentState = {};
     const { api, session, sessionInfo } = await bootstrapSession({
-        flavor: 'claude',
         startedBy,
         workingDirectory,
         agentState: initialState

@@ -11,10 +11,6 @@ export interface SlashCommand {
     pluginName?: string;  // Name of the plugin that provides this command
 }
 
-export interface ListSlashCommandsRequest {
-    agent: string;
-}
-
 export interface ListSlashCommandsResponse {
     success: boolean;
     commands?: SlashCommand[];
@@ -22,17 +18,15 @@ export interface ListSlashCommandsResponse {
 }
 
 /**
- * Built-in slash commands for each agent type.
+ * Built-in slash commands.
  */
-const BUILTIN_COMMANDS: Record<string, SlashCommand[]> = {
-    claude: [
-        { name: 'clear', description: 'Clear conversation history', source: 'builtin' },
-        { name: 'compact', description: 'Compact conversation context', source: 'builtin' },
-        { name: 'context', description: 'Show context information', source: 'builtin' },
-        { name: 'cost', description: 'Show session cost', source: 'builtin' },
-        { name: 'plan', description: 'Toggle plan mode', source: 'builtin' },
-    ],
-};
+const BUILTIN_COMMANDS: SlashCommand[] = [
+    { name: 'clear', description: 'Clear conversation history', source: 'builtin' },
+    { name: 'compact', description: 'Compact conversation context', source: 'builtin' },
+    { name: 'context', description: 'Show context information', source: 'builtin' },
+    { name: 'cost', description: 'Show session cost', source: 'builtin' },
+    { name: 'plan', description: 'Toggle plan mode', source: 'builtin' },
+];
 
 /**
  * Interface for installed_plugins.json structure
@@ -73,15 +67,11 @@ function parseFrontmatter(fileContent: string): { description?: string; content:
 }
 
 /**
- * Get the user commands directory for an agent type.
- * Returns null if the agent doesn't support user commands.
+ * Get the user commands directory for Claude.
  */
-function getUserCommandsDir(agent: string): string | null {
-    if (agent === 'claude') {
-        const configDir = process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), '.claude');
-        return join(configDir, 'commands');
-    }
-    return null;
+function getUserCommandsDir(): string {
+    const configDir = process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), '.claude');
+    return join(configDir, 'commands');
 }
 
 /**
@@ -141,14 +131,10 @@ async function scanCommandsDir(
 }
 
 /**
- * Scan user-defined commands from ~/.claude/commands/ or equivalent
+ * Scan user-defined commands from ~/.claude/commands/
  */
-async function scanUserCommands(agent: string): Promise<SlashCommand[]> {
-    const dir = getUserCommandsDir(agent);
-    if (!dir) {
-        return [];
-    }
-    return scanCommandsDir(dir, 'user');
+async function scanUserCommands(): Promise<SlashCommand[]> {
+    return scanCommandsDir(getUserCommandsDir(), 'user');
 }
 
 /**
@@ -156,12 +142,7 @@ async function scanUserCommands(agent: string): Promise<SlashCommand[]> {
  * Reads ~/.claude/plugins/installed_plugins.json to find installed plugins,
  * then scans each plugin's commands directory.
  */
-async function scanPluginCommands(agent: string): Promise<SlashCommand[]> {
-    // Only Claude supports plugins for now
-    if (agent !== 'claude') {
-        return [];
-    }
-
+async function scanPluginCommands(): Promise<SlashCommand[]> {
     const configDir = process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), '.claude');
     const installedPluginsPath = join(configDir, 'plugins', 'installed_plugins.json');
 
@@ -205,18 +186,16 @@ async function scanPluginCommands(agent: string): Promise<SlashCommand[]> {
 }
 
 /**
- * List all available slash commands for an agent type.
+ * List all available slash commands.
  * Returns built-in commands, user-defined commands, and plugin commands.
  */
-export async function listSlashCommands(agent: string): Promise<SlashCommand[]> {
-    const builtin = BUILTIN_COMMANDS[agent] ?? [];
-
+export async function listSlashCommands(): Promise<SlashCommand[]> {
     // Scan user commands and plugin commands in parallel
     const [user, plugin] = await Promise.all([
-        scanUserCommands(agent),
-        scanPluginCommands(agent),
+        scanUserCommands(),
+        scanPluginCommands(),
     ]);
 
     // Combine: built-in first, then user commands, then plugin commands
-    return [...builtin, ...user, ...plugin];
+    return [...BUILTIN_COMMANDS, ...user, ...plugin];
 }

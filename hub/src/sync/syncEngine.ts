@@ -300,14 +300,13 @@ export class SyncEngine {
     async spawnSession(
         machineId: string,
         directory: string,
-        agent: 'claude' = 'claude',
         model?: string,
         yolo?: boolean,
         sessionType?: 'simple' | 'worktree',
         worktreeName?: string,
         resumeSessionId?: string
     ): Promise<{ type: 'success'; sessionId: string } | { type: 'error'; message: string }> {
-        return await this.rpcGateway.spawnSession(machineId, directory, agent, model, yolo, sessionType, worktreeName, resumeSessionId)
+        return await this.rpcGateway.spawnSession(machineId, directory, model, yolo, sessionType, worktreeName, resumeSessionId)
     }
 
     async resumeSession(sessionId: string, namespace: string): Promise<ResumeSessionResult> {
@@ -360,7 +359,6 @@ export class SyncEngine {
         const spawnResult = await this.rpcGateway.spawnSession(
             targetMachine.id,
             metadata.path,
-            'claude',
             undefined,
             undefined,
             undefined,
@@ -437,12 +435,12 @@ export class SyncEngine {
         return await this.rpcGateway.runRipgrep(sessionId, args, cwd)
     }
 
-    async listSlashCommands(sessionId: string, agent: string): Promise<{
+    async listSlashCommands(sessionId: string): Promise<{
         success: boolean
         commands?: Array<{ name: string; description?: string; source: 'builtin' | 'user' }>
         error?: string
     }> {
-        return await this.rpcGateway.listSlashCommands(sessionId, agent)
+        return await this.rpcGateway.listSlashCommands(sessionId)
     }
 
     async listSkills(sessionId: string): Promise<{

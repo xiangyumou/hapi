@@ -1,7 +1,6 @@
 import { ApiSessionClient } from "@/api/apiSession"
 import { MessageQueue2 } from "@/utils/MessageQueue2"
 import { logger } from "@/ui/logger"
-import { runLocalRemoteSession } from "@/agent/loopBase"
 import { Session } from "./session"
 import { claudeLocalLauncher } from "./claudeLocalLauncher"
 import { claudeRemoteLauncher } from "./claudeRemoteLauncher"
@@ -18,6 +17,63 @@ export interface EnhancedMode {
     appendSystemPrompt?: string;
     allowedTools?: string[];
     disallowedTools?: string[];
+}
+
+type LoopLauncher<TSession> = (session: TSession) => Promise<'switch' | 'exit'>;
+
+async function runLocalRemoteLoop(opts: {
+    session: Session;
+    startingMode?: 'local' | 'remote';
+    logTag: string;
+    runLocal: LoopLauncher<Session>;
+    runRemote: LoopLauncher<Session>;
+}): Promise<void> {
+    let mode: 'local' | 'remote' = opts.startingMode ?? 'local';
+
+    while (true) {
+        logger.debug(`[${opts.logTag}] Iteration with mode: ${mode}`);
+
+        if (mode === 'local') {
+            const reason = await opts.runLocal(opts.session);
+            if (reason === 'exit') {
+                return;
+            }
+            mode = 'remote';
+            opts.session.onModeChange(mode);
+            continue;
+        }
+
+        if (mode === 'remote') {
+            const reason = await opts.runRemote(opts.session);
+            if (reason === 'exit') {
+                return;
+            }
+            mode = 'local';
+            opts.session.onModeChange(mode);
+            continue;
+        }
+    }
+}
+
+async function runLocalRemoteSession(opts: {
+    session: Session;
+    startingMode?: 'local' | 'remote';
+    logTag: string;
+    runLocal: LoopLauncher<Session>;
+    runRemote: LoopLauncher<Session>;
+    onSessionReady?: (session: Session) => void;
+}): Promise<void> {
+    if (opts.onSessionReady) {
+        opts.onSessionReady(opts.session);
+    }
+
+    await runLocalRemoteLoop({
+        session: opts.session,
+        startingMode: opts.startingMode,
+        logTag: opts.logTag,
+        runLocal: opts.runLocal,
+        runRemote: opts.runRemote
+    });
 }
 
 interface LoopOptions {
@@ -39,8 +95,6 @@ interface LoopOptions {
 }
 
 export async function loop(opts: LoopOptions) {
-
-    // Get log path for debug display
     const logPath = logger.logFilePath;
     const startedBy = opts.startedBy ?? 'terminal';
     const startingMode = opts.startingMode ?? 'local';

@@ -1,7 +1,7 @@
 import { logger } from '@/ui/logger'
 import { Future } from '@/utils/future'
-import { getLocalLaunchExitReason } from '@/agent/localLaunchPolicy'
-import type { LocalLaunchExitReason, StartedBy } from '@/agent/localLaunchPolicy'
+import { getLocalLaunchExitReason } from '@/claude/localLaunchPolicy'
+import type { LocalLaunchExitReason, StartedBy } from '@/claude/localLaunchPolicy'
 
 type QueueLike = {
     size(): number

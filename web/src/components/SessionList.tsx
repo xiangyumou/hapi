@@ -141,11 +141,6 @@ function getTodoProgress(session: SessionSummary): { completed: number; total: n
     return session.todoProgress
 }
 
-function getAgentLabel(session: SessionSummary): string {
-    const flavor = session.metadata?.flavor?.trim()
-    if (flavor) return flavor
-    return 'unknown'
-}
 
 function formatRelativeTime(value: number, t: (key: string, params?: Record<string, string | number>) => string): string | null {
     const ms = value < 1_000_000_000_000 ? value * 1000 : value
@@ -256,7 +251,7 @@ function SessionItem(props: {
                         <span className="flex h-4 w-4 items-center justify-center" aria-hidden="true">
                             ❖
                         </span>
-                        {getAgentLabel(s)}
+                        {"Claude"}
                     </span>
                     <span>{t('session.item.modelMode')}: {s.modelMode || 'default'}</span>
                     {s.metadata?.worktree?.branch ? (

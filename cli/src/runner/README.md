@@ -76,25 +76,7 @@ Control Flow:
    - Releases lock file
 5. If HTTP fails, falls back to `killProcess(pid, true)` (uses `taskkill /T /F` on Windows)
 
-## 2. Multi-Agent Support
-
-The runner supports spawning sessions with different AI agents:
-
-| Agent | Command | Token Environment |
-|-------|---------|-------------------|
-| `claude` (default) | `hapi claude` | `CLAUDE_CODE_OAUTH_TOKEN` |
-| `codex` | `hapi codex` | `CODEX_HOME` (temp directory with `auth.json`) |
-| `gemini` | `hapi gemini` | - |
-| `opencode` | `hapi opencode` | OpenCode config (no token injection) |
-
-### Token Authentication
-
-When spawning a session with a token:
-- **Claude**: Sets `CLAUDE_CODE_OAUTH_TOKEN` environment variable
-- **Codex**: Creates temp directory at `os.tmpdir()/hapi-codex-*`, writes token to `auth.json`, sets `CODEX_HOME`
-- **OpenCode**: No token injection; relies on OpenCode's own configuration
-
-## 3. Session Management
+## 2. Session Management
 
 ### Runner-Spawned Sessions (Remote)
 

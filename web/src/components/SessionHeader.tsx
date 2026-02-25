@@ -135,7 +135,7 @@ export function SessionHeader(props: {
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-[var(--app-hint)]">
                             <span className="inline-flex items-center gap-1">
                                 <span aria-hidden="true">❖</span>
-                                {session.metadata?.flavor?.trim() || 'unknown'}
+                                {'Claude'}
                             </span>
                             <span>
                                 {t('session.item.modelMode')}: {session.modelMode || 'default'}

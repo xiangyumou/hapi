@@ -9,7 +9,7 @@ import { Bot, Context, InlineKeyboard } from 'grammy'
 import { SyncEngine, Session } from '../sync/syncEngine'
 import { handleCallback, CallbackContext } from './callbacks'
 import { formatSessionNotification, createNotificationKeyboard } from './sessionView'
-import { getAgentName } from '../notifications/sessionInfo'
+
 import type { NotificationChannel } from '../notifications/notificationTypes'
 import type { Store } from '../store'
 
@@ -189,7 +189,7 @@ export class HappyBot implements NotificationChannel {
             return
         }
 
-        const agentName = getAgentName(session)
+        const agentName = 'Claude'
         const url = buildMiniAppDeepLink(this.publicUrl, `session_${session.id}`)
         const keyboard = new InlineKeyboard()
             .webApp('Open Session', url)

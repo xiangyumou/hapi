@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: 'HAPI',
-  description: 'Control your AI agents from anywhere',
+  description: 'Control Claude Code from anywhere',
   base: '/docs/',
 
   head: [

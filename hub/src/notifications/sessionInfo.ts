@@ -9,7 +9,3 @@ export function getSessionName(session: Session): string {
     }
     return session.id.slice(0, 8)
 }
-
-export function getAgentName(session: Session): string {
-    return 'Claude'
-}

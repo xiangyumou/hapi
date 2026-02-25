@@ -106,7 +106,6 @@ export class RpcGateway {
     async spawnSession(
         machineId: string,
         directory: string,
-        agent: 'claude' = 'claude',
         model?: string,
         yolo?: boolean,
         sessionType?: 'simple' | 'worktree',
@@ -117,7 +116,7 @@ export class RpcGateway {
             const result = await this.machineRpc(
                 machineId,
                 'spawn-happy-session',
-                { type: 'spawn-in-directory', directory, agent, model, yolo, sessionType, worktreeName, resumeSessionId }
+                { type: 'spawn-in-directory', directory, model, yolo, sessionType, worktreeName, resumeSessionId }
             )
             if (result && typeof result === 'object') {
                 const obj = result as Record<string, unknown>
@@ -184,12 +183,12 @@ export class RpcGateway {
         return await this.sessionRpc(sessionId, 'ripgrep', { args, cwd }) as RpcCommandResponse
     }
 
-    async listSlashCommands(sessionId: string, agent: string): Promise<{
+    async listSlashCommands(sessionId: string): Promise<{
         success: boolean
         commands?: Array<{ name: string; description?: string; source: 'builtin' | 'user' }>
         error?: string
     }> {
-        return await this.sessionRpc(sessionId, 'listSlashCommands', { agent }) as {
+        return await this.sessionRpc(sessionId, 'listSlashCommands', {}) as {
             success: boolean
             commands?: Array<{ name: string; description?: string; source: 'builtin' | 'user' }>
             error?: string

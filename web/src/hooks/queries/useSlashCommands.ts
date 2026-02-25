@@ -22,26 +22,23 @@ function levenshteinDistance(a: string, b: string): number {
 }
 
 /**
- * Built-in slash commands per agent type.
+ * Built-in slash commands.
  * These are shown immediately without waiting for RPC.
  */
-const BUILTIN_COMMANDS: Record<string, SlashCommand[]> = {
-    claude: [
-        { name: 'clear', description: 'Clear conversation history and free up context', source: 'builtin' },
-        { name: 'compact', description: 'Clear conversation history but keep a summary in context', source: 'builtin' },
-        { name: 'context', description: 'Visualize current context usage as a colored grid', source: 'builtin' },
-        { name: 'cost', description: 'Show the total cost and duration of the current session', source: 'builtin' },
-        { name: 'doctor', description: 'Diagnose and verify your Claude Code installation and settings', source: 'builtin' },
-        { name: 'plan', description: 'View or open the current session plan', source: 'builtin' },
-        { name: 'stats', description: 'Show your Claude Code usage statistics and activity', source: 'builtin' },
-        { name: 'status', description: 'Show Claude Code status including version, model, account, and API connectivity', source: 'builtin' },
-    ],
-}
+const BUILTIN_COMMANDS: SlashCommand[] = [
+    { name: 'clear', description: 'Clear conversation history and free up context', source: 'builtin' },
+    { name: 'compact', description: 'Clear conversation history but keep a summary in context', source: 'builtin' },
+    { name: 'context', description: 'Visualize current context usage as a colored grid', source: 'builtin' },
+    { name: 'cost', description: 'Show the total cost and duration of the current session', source: 'builtin' },
+    { name: 'doctor', description: 'Diagnose and verify your Claude Code installation and settings', source: 'builtin' },
+    { name: 'plan', description: 'View or open the current session plan', source: 'builtin' },
+    { name: 'stats', description: 'Show your Claude Code usage statistics and activity', source: 'builtin' },
+    { name: 'status', description: 'Show Claude Code status including version, model, account, and API connectivity', source: 'builtin' },
+]
 
 export function useSlashCommands(
     api: ApiClient | null,
     sessionId: string | null,
-    agentType: string = 'claude'
 ): {
     commands: SlashCommand[]
     isLoading: boolean
@@ -67,19 +64,17 @@ export function useSlashCommands(
 
     // Merge built-in commands with user-defined and plugin commands from API
     const commands = useMemo(() => {
-        const builtin = BUILTIN_COMMANDS[agentType] ?? BUILTIN_COMMANDS['claude'] ?? []
-
         // If API succeeded, add user-defined and plugin commands
         if (query.data?.success && query.data.commands) {
             const extraCommands = query.data.commands.filter(
                 cmd => cmd.source === 'user' || cmd.source === 'plugin'
             )
-            return [...builtin, ...extraCommands]
+            return [...BUILTIN_COMMANDS, ...extraCommands]
         }
 
         // Fallback to built-in commands only
-        return builtin
-    }, [agentType, query.data])
+        return BUILTIN_COMMANDS
+    }, [query.data])
 
     const getSuggestions = useCallback(async (queryText: string): Promise<Suggestion[]> => {
         const searchTerm = queryText.startsWith('/')

@@ -16,7 +16,6 @@ import packageJson from '../../package.json'
 export type SessionStartedBy = 'runner' | 'terminal'
 
 export type SessionBootstrapOptions = {
-    flavor: string
     startedBy?: SessionStartedBy
     workingDirectory?: string
     tag?: string
@@ -45,7 +44,6 @@ export function buildMachineMetadata(): MachineMetadata {
 }
 
 export function buildSessionMetadata(options: {
-    flavor: string
     startedBy: SessionStartedBy
     workingDirectory: string
     machineId: string
@@ -70,7 +68,6 @@ export function buildSessionMetadata(options: {
         startedBy: options.startedBy,
         lifecycleState: 'running',
         lifecycleStateSince: now,
-        flavor: options.flavor,
         worktree: worktreeInfo ?? undefined
     }
 }
@@ -115,7 +112,6 @@ export async function bootstrapSession(options: SessionBootstrapOptions): Promis
     })
 
     const metadata = buildSessionMetadata({
-        flavor: options.flavor,
         startedBy,
         workingDirectory,
         machineId

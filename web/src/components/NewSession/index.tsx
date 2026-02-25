@@ -201,7 +201,6 @@ export function NewSession(props: {
             const result = await spawnSession({
                 machineId,
                 directory: directory.trim(),
-                agent: 'claude',
                 model: resolvedModel,
                 yolo: yoloMode,
                 sessionType,

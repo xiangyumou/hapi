@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { deriveToolName, deriveToolNameWithSource, isPlaceholderToolName } from './utils';
+import { deriveToolName, deriveToolNameWithSource, isPlaceholderToolName } from './agentUtils';
 
 describe('agent tool name helpers', () => {
     it('treats generic kind fallback as placeholder', () => {

@@ -44,7 +44,6 @@ export default {
 
   // Session list
   'session.item.path': 'path',
-  'session.item.agent': 'agent',
   'session.item.model': 'model',
   'session.item.modelMode': 'mode',
   'session.item.worktree': 'worktree',
@@ -101,12 +100,11 @@ export default {
   'newSession.type.worktree': 'Worktree',
   'newSession.type.worktree.desc': 'Create a new worktree next to repo',
   'newSession.type.worktree.placeholder': 'feature-x (default 1228-xxxx)',
-  'newSession.agent': 'Agent',
   'newSession.model': 'Model',
   'newSession.model.optional': 'optional',
   'newSession.yolo': 'YOLO mode',
   'newSession.yolo.title': 'Bypass approvals and sandbox',
-  'newSession.yolo.desc': 'Uses dangerous agent flags when spawning.',
+  'newSession.yolo.desc': 'Uses dangerous flags when spawning.',
   'newSession.create': 'Create',
   'newSession.creating': 'Creating…',
 

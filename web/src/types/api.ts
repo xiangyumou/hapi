@@ -27,7 +27,6 @@ export type SessionMetadataSummary = {
     summary?: { text: string; updatedAt: number }
     machineId?: string
     tools?: string[]
-    flavor?: string | null
     worktree?: WorktreeMetadata
 }
 

@@ -17,7 +17,7 @@ import { isRetryableConnectionError } from '@/utils/errorUtils';
 import { cleanupRunnerState, getInstalledCliMtimeMs, isRunnerRunningCurrentlyInstalledHappyVersion, stopRunner } from './controlClient';
 import { startRunnerControlServer } from './controlServer';
 import { createWorktree, removeWorktree, type WorktreeInfo } from './worktree';
-import { buildMachineMetadata } from '@/agent/sessionFactory';
+import { buildMachineMetadata } from '@/claude/sessionFactory';
 
 export async function startRunner(): Promise<void> {
   // We don't have cleanup function at the time of server construction
