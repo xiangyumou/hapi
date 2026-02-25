@@ -14,7 +14,7 @@ import { registerKillSessionHandler } from './registerKillSessionHandler';
 import type { Session } from './session';
 import { bootstrapSession } from '@/agent/sessionFactory';
 import { createModeChangeHandler, createRunnerLifecycle, setControlledByUser } from '@/agent/runnerLifecycle';
-import { isModelModeAllowedForFlavor, isPermissionModeAllowedForFlavor } from '@hapi/protocol';
+import { isModelModeAllowed, isPermissionModeAllowed } from '@hapi/protocol';
 import { ModelModeSchema, PermissionModeSchema } from '@hapi/protocol/schemas';
 import { formatMessageWithAttachments } from '@/utils/attachmentFormatter';
 
@@ -161,7 +161,7 @@ export async function runClaude(options: StartOptions = {}): Promise<void> {
     };
     session.onUserMessage((message) => {
         const sessionPermissionMode = currentSessionRef.current?.getPermissionMode();
-        if (sessionPermissionMode && isPermissionModeAllowedForFlavor(sessionPermissionMode, 'claude')) {
+        if (sessionPermissionMode && isPermissionModeAllowed(sessionPermissionMode as PermissionMode)) {
             currentPermissionMode = sessionPermissionMode as PermissionMode;
         }
         const messagePermissionMode = currentPermissionMode;
@@ -276,7 +276,7 @@ export async function runClaude(options: StartOptions = {}): Promise<void> {
 
     const resolvePermissionMode = (value: unknown): PermissionMode => {
         const parsed = PermissionModeSchema.safeParse(value);
-        if (!parsed.success || !isPermissionModeAllowedForFlavor(parsed.data, 'claude')) {
+        if (!parsed.success || !isPermissionModeAllowed(parsed.data)) {
             throw new Error('Invalid permission mode');
         }
         return parsed.data as PermissionMode;
@@ -284,7 +284,7 @@ export async function runClaude(options: StartOptions = {}): Promise<void> {
 
     const resolveModelMode = (value: unknown): SessionModelMode => {
         const parsed = ModelModeSchema.safeParse(value);
-        if (!parsed.success || !isModelModeAllowedForFlavor(parsed.data, 'claude')) {
+        if (!parsed.success || !isModelModeAllowed(parsed.data)) {
             throw new Error('Invalid model mode');
         }
         return parsed.data;

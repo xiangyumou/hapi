@@ -15,7 +15,6 @@ export type Usage = z.infer<typeof UsageSchema>
 export type {
     AgentState,
     AttachmentMetadata,
-    ClaudePermissionMode,
     Metadata,
     Session
 } from '@hapi/protocol/types'

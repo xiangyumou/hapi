@@ -13,7 +13,7 @@ import type {
     SDKResultMessage
 } from '@/claude/sdk'
 import type { RawJSONLines } from '@/claude/types'
-import type { ClaudePermissionMode } from '@hapi/protocol/types'
+import type { PermissionMode } from '@hapi/protocol/types'
 
 /**
  * Context for converting SDK messages to log format
@@ -28,7 +28,7 @@ export interface ConversionContext {
 
 type PermissionResponse = {
     approved: boolean
-    mode?: ClaudePermissionMode
+    mode?: PermissionMode
     reason?: string
 }
 

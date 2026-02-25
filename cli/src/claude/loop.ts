@@ -7,9 +7,8 @@ import { claudeLocalLauncher } from "./claudeLocalLauncher"
 import { claudeRemoteLauncher } from "./claudeRemoteLauncher"
 import { ApiClient } from "@/lib"
 import type { SessionModelMode } from "@/api/types"
-import type { ClaudePermissionMode } from "@hapi/protocol/types"
-
-export type PermissionMode = ClaudePermissionMode;
+export type { PermissionMode } from "@hapi/protocol/types"
+import type { PermissionMode } from "@hapi/protocol/types"
 
 export interface EnhancedMode {
     permissionMode: PermissionMode;

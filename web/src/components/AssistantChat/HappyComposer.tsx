@@ -1,4 +1,4 @@
-import { getPermissionModeOptionsForFlavor, MODEL_MODE_LABELS, MODEL_MODES } from '@hapi/protocol'
+import { getPermissionModeOptions, MODEL_MODE_LABELS, MODEL_MODES } from '@hapi/protocol'
 import { ComposerPrimitive, useAssistantApi, useAssistantState } from '@assistant-ui/react'
 import {
     type ChangeEvent as ReactChangeEvent,
@@ -44,7 +44,6 @@ export function HappyComposer(props: {
     agentState?: AgentState | null
     contextSize?: number
     controlledByUser?: boolean
-    agentFlavor?: string | null
     onPermissionModeChange?: (mode: PermissionMode) => void
     onModelModeChange?: (mode: ModelMode) => void
     onSwitchToRemote?: () => void
@@ -63,7 +62,6 @@ export function HappyComposer(props: {
         agentState,
         contextSize,
         controlledByUser = false,
-        agentFlavor,
         onPermissionModeChange,
         onModelModeChange,
         onSwitchToRemote,
@@ -227,8 +225,8 @@ export function HappyComposer(props: {
     }, [switchDisabled, onSwitchToRemote, haptic])
 
     const permissionModeOptions = useMemo(
-        () => getPermissionModeOptionsForFlavor(agentFlavor),
-        [agentFlavor]
+        () => getPermissionModeOptions(),
+        []
     )
     const permissionModes = useMemo(
         () => permissionModeOptions.map((option) => option.mode),
@@ -521,7 +519,6 @@ export function HappyComposer(props: {
                         contextSize={contextSize}
                         modelMode={modelMode}
                         permissionMode={permissionMode}
-                        agentFlavor={agentFlavor}
                     />
 
                     <div className="overflow-hidden rounded-[20px] bg-[var(--app-secondary-bg)]">

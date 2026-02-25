@@ -1,4 +1,4 @@
-import { getPermissionModeLabel, getPermissionModeTone, isPermissionModeAllowedForFlavor } from '@hapi/protocol'
+import { getPermissionModeLabel, getPermissionModeTone, isPermissionModeAllowed } from '@hapi/protocol'
 import type { PermissionModeTone } from '@hapi/protocol'
 import { useMemo } from 'react'
 import type { AgentState, ModelMode, PermissionMode } from '@/types/api'
@@ -96,7 +96,6 @@ export function StatusBar(props: {
     contextSize?: number
     modelMode?: ModelMode
     permissionMode?: PermissionMode
-    agentFlavor?: string | null
 }) {
     const { t } = useTranslation()
     const connectionStatus = useMemo(
@@ -117,7 +116,7 @@ export function StatusBar(props: {
     const permissionMode = props.permissionMode
     const displayPermissionMode = permissionMode
         && permissionMode !== 'default'
-        && isPermissionModeAllowedForFlavor(permissionMode, props.agentFlavor)
+        && isPermissionModeAllowed(permissionMode)
         ? permissionMode
         : null
 

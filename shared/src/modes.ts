@@ -1,13 +1,8 @@
-export const CLAUDE_PERMISSION_MODES = ['default', 'acceptEdits', 'bypassPermissions', 'plan'] as const
-export type ClaudePermissionMode = typeof CLAUDE_PERMISSION_MODES[number]
-
 export const PERMISSION_MODES = ['default', 'acceptEdits', 'bypassPermissions', 'plan'] as const
 export type PermissionMode = typeof PERMISSION_MODES[number]
 
 export const MODEL_MODES = ['default', 'sonnet', 'opus'] as const
 export type ModelMode = typeof MODEL_MODES[number]
-
-export type AgentFlavor = 'claude'
 
 export const PERMISSION_MODE_LABELS: Record<PermissionMode, string> = {
     default: 'Default',
@@ -45,26 +40,26 @@ export function getPermissionModeTone(mode: PermissionMode): PermissionModeTone 
     return PERMISSION_MODE_TONES[mode]
 }
 
-export function getPermissionModesForFlavor(_flavor?: string | null): readonly PermissionMode[] {
-    return CLAUDE_PERMISSION_MODES
+export function getPermissionModes(): readonly PermissionMode[] {
+    return PERMISSION_MODES
 }
 
-export function getPermissionModeOptionsForFlavor(flavor?: string | null): PermissionModeOption[] {
-    return getPermissionModesForFlavor(flavor).map((mode) => ({
+export function getPermissionModeOptions(): PermissionModeOption[] {
+    return getPermissionModes().map((mode) => ({
         mode,
         label: getPermissionModeLabel(mode),
         tone: getPermissionModeTone(mode)
     }))
 }
 
-export function isPermissionModeAllowedForFlavor(mode: PermissionMode, flavor?: string | null): boolean {
-    return getPermissionModesForFlavor(flavor).includes(mode)
+export function isPermissionModeAllowed(mode: PermissionMode): boolean {
+    return getPermissionModes().includes(mode)
 }
 
-export function getModelModesForFlavor(_flavor?: string | null): readonly ModelMode[] {
+export function getModelModes(): readonly ModelMode[] {
     return MODEL_MODES
 }
 
-export function isModelModeAllowedForFlavor(mode: ModelMode, flavor?: string | null): boolean {
-    return getModelModesForFlavor(flavor).includes(mode)
+export function isModelModeAllowed(mode: ModelMode): boolean {
+    return getModelModes().includes(mode)
 }

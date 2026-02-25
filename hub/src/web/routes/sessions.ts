@@ -1,4 +1,4 @@
-import { getPermissionModesForFlavor, isModelModeAllowedForFlavor, isPermissionModeAllowedForFlavor, toSessionSummary } from '@hapi/protocol'
+import { getPermissionModes, isModelModeAllowed, isPermissionModeAllowed, toSessionSummary } from '@hapi/protocol'
 import { ModelModeSchema, PermissionModeSchema } from '@hapi/protocol/schemas'
 import { Hono } from 'hono'
 import { z } from 'zod'
@@ -235,15 +235,14 @@ export function createSessionsRoutes(getSyncEngine: () => SyncEngine | null): Ho
             return c.json({ error: 'Invalid body' }, 400)
         }
 
-        const flavor = sessionResult.session.metadata?.flavor ?? 'claude'
         const mode = parsed.data.mode
 
-        const allowedModes = getPermissionModesForFlavor(flavor)
+        const allowedModes = getPermissionModes()
         if (allowedModes.length === 0) {
             return c.json({ error: 'Permission mode not supported for session flavor' }, 400)
         }
 
-        if (!isPermissionModeAllowedForFlavor(mode, flavor)) {
+        if (!isPermissionModeAllowed(mode)) {
             return c.json({ error: 'Invalid permission mode for session flavor' }, 400)
         }
 
@@ -273,8 +272,7 @@ export function createSessionsRoutes(getSyncEngine: () => SyncEngine | null): Ho
             return c.json({ error: 'Invalid body' }, 400)
         }
 
-        const flavor = sessionResult.session.metadata?.flavor ?? 'claude'
-        if (!isModelModeAllowedForFlavor(parsed.data.model, flavor)) {
+        if (!isModelModeAllowed(parsed.data.model)) {
             return c.json({ error: 'Model mode is only supported for Claude sessions' }, 400)
         }
 
