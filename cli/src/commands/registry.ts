@@ -1,13 +1,9 @@
 import { authCommand } from './auth'
 import { claudeCommand } from './claude'
-import { codexCommand } from './codex'
 import { connectCommand } from './connect'
 import { runnerCommand } from './runner'
 import { doctorCommand } from './doctor'
-import { geminiCommand } from './gemini'
-import { opencodeCommand } from './opencode'
 import { hookForwarderCommand } from './hookForwarder'
-import { mcpCommand } from './mcp'
 import { notifyCommand } from './notify'
 import { hubCommand } from './hub'
 import type { CommandContext, CommandDefinition } from './types'
@@ -15,10 +11,6 @@ import type { CommandContext, CommandDefinition } from './types'
 const COMMANDS: CommandDefinition[] = [
     authCommand,
     connectCommand,
-    codexCommand,
-    geminiCommand,
-    opencodeCommand,
-    mcpCommand,
     hubCommand,
     { ...hubCommand, name: 'server' },
     hookForwarderCommand,

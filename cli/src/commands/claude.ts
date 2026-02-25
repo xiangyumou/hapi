@@ -70,10 +70,6 @@ ${chalk.bold('hapi')} - Claude Code On the Go
 ${chalk.bold('Usage:')}
   hapi [options]         Start Claude with Telegram control (direct-connect)
   hapi auth              Manage authentication
-  hapi codex             Start Codex mode
-  hapi gemini            Start Gemini ACP mode
-  hapi opencode          Start OpenCode ACP mode
-  hapi mcp               Start MCP stdio bridge
   hapi connect           (not available in direct-connect mode)
   hapi notify            (not available in direct-connect mode)
   hapi hub               Start the API + web hub
