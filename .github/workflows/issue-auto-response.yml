@@ -64,7 +64,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Run Codex for Issue Auto Response
+      - name: Run AI for Issue Auto Response
         if: steps.check_bot.outputs.has_bot != 'true'
         uses: openai/codex-action@v1
         env:

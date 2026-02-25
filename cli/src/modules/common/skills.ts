@@ -18,8 +18,8 @@ export interface ListSkillsResponse {
 }
 
 function getSkillsRoot(): string {
-    const codexHome = process.env.CODEX_HOME ?? join(homedir(), '.codex');
-    return join(codexHome, 'skills');
+    const claudeConfigDir = process.env.CLAUDE_CONFIG_DIR ?? join(homedir(), '.claude');
+    return join(claudeConfigDir, 'skills');
 }
 
 function parseFrontmatter(fileContent: string): { frontmatter?: Record<string, unknown>; body: string } {

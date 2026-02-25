@@ -1,14 +1,10 @@
 # hapi CLI
 
-Run Claude Code, Codex, Gemini, or OpenCode sessions from your terminal and control them remotely through the hapi hub.
+Run Claude Code sessions from your terminal and control them remotely through the hapi hub.
 
 ## What it does
 
 - Starts Claude Code sessions and registers them with hapi-hub.
-- Starts Codex mode for OpenAI-based sessions.
-- Starts Gemini mode via ACP (Anthropic Code Plugins).
-- Starts OpenCode mode via ACP and its plugin hook system.
-- Provides an MCP stdio bridge for external tools.
 - Manages a background runner for long-running sessions.
 - Includes diagnostics and auth helpers.
 
@@ -24,12 +20,6 @@ Run Claude Code, Codex, Gemini, or OpenCode sessions from your terminal and cont
 ### Session commands
 
 - `hapi` - Start a Claude Code session (passes through Claude CLI flags). See `src/index.ts`.
-- `hapi codex` - Start Codex mode. See `src/codex/runCodex.ts`.
-- `hapi codex resume <sessionId>` - Resume existing Codex session.
-- `hapi gemini` - Start Gemini mode via ACP. See `src/agent/runners/runAgentSession.ts`.
-  Note: Gemini runs in remote mode only; it waits for messages from the hub UI/Telegram.
-- `hapi opencode` - Start OpenCode mode via ACP. See `src/opencode/runOpencode.ts`.
-  Note: OpenCode supports local and remote modes; local mode streams via OpenCode plugins.
 
 ### Authentication
 
@@ -59,7 +49,6 @@ See `src/ui/doctor.ts`.
 
 ### Other
 
-- `hapi mcp` - Start MCP stdio bridge. See `src/codex/happyMcpStdioBridge.ts`.
 - `hapi hub` - Start the bundled hub (single binary workflow).
 - `hapi server` - Alias for `hapi hub`.
 
@@ -77,7 +66,6 @@ See `src/configuration.ts` for all options.
 - `HAPI_HOME` - Config/data directory (default: ~/.hapi).
 - `HAPI_EXPERIMENTAL` - Enable experimental features (true/1/yes).
 - `HAPI_CLAUDE_PATH` - Path to a specific `claude` executable.
-- `HAPI_HTTP_MCP_URL` - Default MCP target for `hapi mcp`.
 
 ### Runner
 
@@ -103,7 +91,6 @@ Data is stored in `~/.hapi/` (or `$HAPI_HOME`):
 ## Requirements
 
 - Claude CLI installed and logged in (`claude` on PATH).
-- OpenCode CLI installed (`opencode` on PATH).
 - Bun for building from source.
 
 ## Build from source
@@ -126,9 +113,7 @@ bun run build:single-exe
 
 - `src/api/` - Bot communication (Socket.IO + REST).
 - `src/claude/` - Claude Code integration.
-- `src/codex/` - Codex mode integration.
-- `src/agent/` - Multi-agent support (Gemini via ACP).
-- `src/opencode/` - OpenCode ACP + hook integration.
+- `src/agent/` - Agent lifecycle and session management.
 - `src/runner/` - Background service.
 - `src/commands/` - CLI command handlers.
 - `src/ui/` - User interface and diagnostics.

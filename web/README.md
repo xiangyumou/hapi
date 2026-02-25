@@ -40,7 +40,7 @@ See `src/router.tsx` for route definitions.
 - Session title from name, summary, or path.
 - Todo progress display.
 - Pending permission request count.
-- Agent flavor label (claude/codex/gemini).
+- Agent flavor label (claude).
 - Model mode display.
 
 ### Chat interface (`src/components/SessionChat.tsx`)
@@ -69,17 +69,11 @@ See `src/router.tsx` for route definitions.
 - Real-time via Socket.IO
 - Resize handling
 
-### Voice assistant
-
-- ElevenLabs integration (@elevenlabs/react)
-- Real-time voice control
-
 ### New session (`src/components/NewSession/`)
 
 Modular session creation:
 - Machine selector
 - Directory input with recent paths
-- Agent type selector
 - Model selector
 - Permission mode toggle (YOLO mode)
 
@@ -109,7 +103,7 @@ See `src/hooks/useSSE.ts`.
 
 ## Stack
 
-React 19 + Vite + TanStack Router/Query + Tailwind + @assistant-ui/react + xterm.js + @elevenlabs/react + socket.io-client + workbox + shiki.
+React 19 + Vite + TanStack Router/Query + Tailwind + @assistant-ui/react + xterm.js + socket.io-client + workbox + shiki.
 
 ## Source structure
 

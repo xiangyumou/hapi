@@ -152,7 +152,7 @@ export type SlashCommand = {
     name: string
     description?: string
     source: 'builtin' | 'user' | 'plugin'
-    content?: string  // Expanded content for Codex user prompts
+    content?: string
     pluginName?: string
 }
 

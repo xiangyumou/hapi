@@ -4,7 +4,7 @@ export interface SpawnSessionOptions {
     sessionId?: string
     resumeSessionId?: string
     approvedNewDirectoryCreation?: boolean
-    agent?: 'claude' | 'codex' | 'gemini' | 'opencode'
+    agent?: 'claude'
     model?: string
     yolo?: boolean
     token?: string

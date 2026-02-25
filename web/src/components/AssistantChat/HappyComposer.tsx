@@ -14,13 +14,11 @@ import {
 } from 'react'
 import type { AgentState, ModelMode, PermissionMode } from '@/types/api'
 import type { Suggestion } from '@/hooks/useActiveSuggestions'
-import type { ConversationStatus } from '@/realtime/types'
 import { useActiveWord } from '@/hooks/useActiveWord'
 import { useActiveSuggestions } from '@/hooks/useActiveSuggestions'
 import { applySuggestion } from '@/utils/applySuggestion'
 import { usePlatform } from '@/hooks/usePlatform'
 import { usePWAInstall } from '@/hooks/usePWAInstall'
-import { isCodexFamilyFlavor } from '@/lib/agentFlavorUtils'
 import { markSkillUsed } from '@/lib/recent-skills'
 import { FloatingOverlay } from '@/components/ChatInput/FloatingOverlay'
 import { Autocomplete } from '@/components/ChatInput/Autocomplete'
@@ -53,11 +51,6 @@ export function HappyComposer(props: {
     onTerminal?: () => void
     autocompletePrefixes?: string[]
     autocompleteSuggestions?: (query: string) => Promise<Suggestion[]>
-    // Voice assistant props
-    voiceStatus?: ConversationStatus
-    voiceMicMuted?: boolean
-    onVoiceToggle?: () => void
-    onVoiceMicToggle?: () => void
 }) {
     const { t } = useTranslation()
     const {
@@ -77,10 +70,6 @@ export function HappyComposer(props: {
         onTerminal,
         autocompletePrefixes = ['@', '/', '$'],
         autocompleteSuggestions = defaultSuggestionHandler,
-        voiceStatus = 'disconnected',
-        voiceMicMuted = false,
-        onVoiceToggle,
-        onVoiceMicToggle
     } = props
 
     // Use ?? so missing values fall back to default (destructuring defaults only handle undefined)
@@ -170,13 +159,9 @@ export function HappyComposer(props: {
             markSkillUsed(suggestion.text.slice(1))
         }
 
-        // For Codex user prompts with content, expand the content instead of command name
+        // Insert suggestion text
         let textToInsert = suggestion.text
-        let addSpace = true
-        if (agentFlavor === 'codex' && suggestion.source === 'user' && suggestion.content) {
-            textToInsert = suggestion.content
-            addSpace = false
-        }
+        const addSpace = true
 
         const result = applySuggestion(
             inputState.text,
@@ -204,7 +189,7 @@ export function HappyComposer(props: {
         }, 0)
 
         haptic('light')
-    }, [api, suggestions, inputState, autocompletePrefixes, haptic, agentFlavor])
+    }, [api, suggestions, inputState, autocompletePrefixes, haptic])
 
     const abortDisabled = controlsDisabled || isAborting || !threadIsRunning
     const switchDisabled = controlsDisabled || isSwitching || !controlledByUser
@@ -324,7 +309,7 @@ export function HappyComposer(props: {
 
     useEffect(() => {
         const handleGlobalKeyDown = (e: globalThis.KeyboardEvent) => {
-            if (e.key === 'm' && (e.metaKey || e.ctrlKey) && onModelModeChange && !isCodexFamilyFlavor(agentFlavor)) {
+            if (e.key === 'm' && (e.metaKey || e.ctrlKey) && onModelModeChange) {
                 e.preventDefault()
                 const currentIndex = MODEL_MODES.indexOf(modelMode as typeof MODEL_MODES[number])
                 const nextIndex = (currentIndex + 1) % MODEL_MODES.length
@@ -335,7 +320,7 @@ export function HappyComposer(props: {
 
         window.addEventListener('keydown', handleGlobalKeyDown)
         return () => window.removeEventListener('keydown', handleGlobalKeyDown)
-    }, [modelMode, onModelModeChange, haptic, agentFlavor])
+    }, [modelMode, onModelModeChange, haptic])
 
     const handleChange = useCallback((e: ReactChangeEvent<HTMLTextAreaElement>) => {
         const selection = {
@@ -398,10 +383,9 @@ export function HappyComposer(props: {
     }, [onModelModeChange, controlsDisabled, haptic])
 
     const showPermissionSettings = Boolean(onPermissionModeChange && permissionModeOptions.length > 0)
-    const showModelSettings = Boolean(onModelModeChange && !isCodexFamilyFlavor(agentFlavor))
+    const showModelSettings = Boolean(onModelModeChange)
     const showSettingsButton = Boolean(showPermissionSettings || showModelSettings)
     const showAbortButton = true
-    const voiceEnabled = Boolean(onVoiceToggle)
 
     const handleSend = useCallback(() => {
         api.composer().send()
@@ -538,7 +522,6 @@ export function HappyComposer(props: {
                         modelMode={modelMode}
                         permissionMode={permissionMode}
                         agentFlavor={agentFlavor}
-                        voiceStatus={voiceStatus}
                     />
 
                     <div className="overflow-hidden rounded-[20px] bg-[var(--app-secondary-bg)]">
@@ -581,11 +564,6 @@ export function HappyComposer(props: {
                             switchDisabled={switchDisabled}
                             isSwitching={isSwitching}
                             onSwitch={handleSwitch}
-                            voiceEnabled={voiceEnabled}
-                            voiceStatus={voiceStatus}
-                            voiceMicMuted={voiceMicMuted}
-                            onVoiceToggle={onVoiceToggle ?? (() => {})}
-                            onVoiceMicToggle={onVoiceMicToggle}
                             onSend={handleSend}
                         />
                     </div>

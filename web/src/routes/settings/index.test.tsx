@@ -22,15 +22,6 @@ vi.mock('@/hooks/useFontScale', () => ({
     ],
 }))
 
-// Mock languages
-vi.mock('@/lib/languages', () => ({
-    getElevenLabsSupportedLanguages: () => [
-        { code: null, name: 'Auto-detect' },
-        { code: 'en', name: 'English' },
-    ],
-    getLanguageDisplayName: (lang: { code: string | null; name: string }) => lang.name,
-}))
-
 function renderWithProviders(ui: React.ReactElement) {
     return render(
         <I18nProvider>
@@ -53,13 +44,6 @@ function renderWithSpyT(ui: React.ReactElement) {
 describe('SettingsPage', () => {
     beforeEach(() => {
         vi.clearAllMocks()
-        // Mock localStorage
-        const localStorageMock = {
-            getItem: vi.fn(() => 'en'),
-            setItem: vi.fn(),
-            removeItem: vi.fn(),
-        }
-        Object.defineProperty(window, 'localStorage', { value: localStorageMock })
     })
 
     it('renders the About section', () => {

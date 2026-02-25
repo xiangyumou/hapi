@@ -16,11 +16,11 @@ describe('NewSession preferences', () => {
         expect(loadPreferredYoloMode()).toBe(false)
     })
 
-    it('loads saved values from storage', () => {
-        localStorage.setItem('hapi:newSession:agent', 'codex')
+    it('loads saved claude value from storage', () => {
+        localStorage.setItem('hapi:newSession:agent', 'claude')
         localStorage.setItem('hapi:newSession:yolo', 'true')
 
-        expect(loadPreferredAgent()).toBe('codex')
+        expect(loadPreferredAgent()).toBe('claude')
         expect(loadPreferredYoloMode()).toBe(true)
     })
 
@@ -31,10 +31,10 @@ describe('NewSession preferences', () => {
     })
 
     it('persists new values to storage', () => {
-        savePreferredAgent('gemini')
+        savePreferredAgent('claude')
         savePreferredYoloMode(true)
 
-        expect(localStorage.getItem('hapi:newSession:agent')).toBe('gemini')
+        expect(localStorage.getItem('hapi:newSession:agent')).toBe('claude')
         expect(localStorage.getItem('hapi:newSession:yolo')).toBe('true')
     })
 })

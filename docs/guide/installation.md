@@ -4,22 +4,12 @@ Install the HAPI CLI and set up the hub.
 
 ## Prerequisites
 
-- Claude Code, OpenAI Codex CLI, Google Gemini CLI, or OpenCode CLI installed
+- Claude Code CLI installed
 
 Verify your CLI is installed:
 
 ```bash
-# For Claude Code
 claude --version
-
-# For OpenAI Codex CLI
-codex --version
-
-# For Google Gemini CLI
-gemini --version
-
-# For OpenCode CLI
-opencode --version
 ```
 
 ## Architecture
@@ -28,7 +18,7 @@ HAPI has three components:
 
 | Component | Role | Required |
 |-----------|------|----------|
-| **CLI** | Wraps AI agents (Claude/Codex/Gemini/OpenCode), runs sessions | Yes |
+| **CLI** | Wraps Claude Code, runs sessions | Yes |
 | **Hub** | Central coordinator: persistence, real-time sync, remote access | Yes |
 | **Runner** | Background service for remote session spawning | Optional |
 
@@ -182,8 +172,6 @@ On first run, HAPI:
 | `VAPID_SUBJECT` | `mailto:admin@hapi.run` | - | Web Push contact info |
 | `HAPI_HOME` | `~/.hapi` | - | Config directory path |
 | `DB_PATH` | `~/.hapi/hapi.db` | - | Database file path |
-| `ELEVENLABS_API_KEY` | - | - | ElevenLabs API key for voice |
-| `ELEVENLABS_AGENT_ID` | Auto-created | - | Custom ElevenLabs agent ID |
 </details>
 
 <details>
@@ -562,20 +550,6 @@ journalctl --user -u hapi-hub -f
 > loginctl enable-linger $USER
 > ```
 </details>
-
-### Voice assistant setup
-
-Enable voice control:
-
-1. Get an API key from [elevenlabs.io](https://elevenlabs.io/app/settings/api-keys)
-2. Set the environment variable:
-
-```bash
-export ELEVENLABS_API_KEY="your-api-key"
-hapi hub --relay
-```
-
-See [Voice Assistant](./voice-assistant.md) for usage details.
 
 ### Security notes
 

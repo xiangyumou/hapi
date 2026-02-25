@@ -1,5 +1,5 @@
-export function isCodexFamilyFlavor(flavor?: string | null): boolean {
-    return flavor === 'codex' || flavor === 'gemini' || flavor === 'opencode'
+export function isCodexFamilyFlavor(_flavor?: string | null): boolean {
+    return false
 }
 
 export function isClaudeFlavor(flavor?: string | null): boolean {
@@ -7,5 +7,5 @@ export function isClaudeFlavor(flavor?: string | null): boolean {
 }
 
 export function isKnownFlavor(flavor?: string | null): boolean {
-    return isClaudeFlavor(flavor) || isCodexFamilyFlavor(flavor)
+    return isClaudeFlavor(flavor)
 }

@@ -36,21 +36,6 @@ const BUILTIN_COMMANDS: Record<string, SlashCommand[]> = {
         { name: 'stats', description: 'Show your Claude Code usage statistics and activity', source: 'builtin' },
         { name: 'status', description: 'Show Claude Code status including version, model, account, and API connectivity', source: 'builtin' },
     ],
-    codex: [
-        { name: 'review', description: 'Review current changes and find issues', source: 'builtin' },
-        { name: 'new', description: 'Start a new chat during a conversation', source: 'builtin' },
-        { name: 'compat', description: 'Summarize conversation to prevent hitting the context limit', source: 'builtin' },
-        { name: 'undo', description: 'Ask Codex to undo a turn', source: 'builtin' },
-        { name: 'diff', description: 'Show git diff including untracked files', source: 'builtin' },
-        { name: 'status', description: 'Show current session configuration and token usage', source: 'builtin' },
-    ],
-    gemini: [
-        { name: 'about', description: 'Show version info', source: 'builtin' },
-        { name: 'clear', description: 'Clear the screen and conversation history', source: 'builtin' },
-        { name: 'compress', description: 'Compress the context by replacing it with a summary', source: 'builtin' },
-        { name: 'stats', description: 'Check session stats', source: 'builtin' },
-    ],
-    opencode: [],
 }
 
 export function useSlashCommands(

@@ -92,44 +92,6 @@ export const knownTools: Record<string, {
         },
         minimal: true
     },
-    CodexBash: {
-        icon: (opts) => {
-            if (isObject(opts.input) && Array.isArray(opts.input.parsed_cmd) && opts.input.parsed_cmd.length > 0) {
-                const first = opts.input.parsed_cmd[0]
-                const type = isObject(first) ? first.type : null
-                if (type === 'read') return <EyeIcon className={DEFAULT_ICON_CLASS} />
-                if (type === 'write') return <FileDiffIcon className={DEFAULT_ICON_CLASS} />
-            }
-            return <TerminalIcon className={DEFAULT_ICON_CLASS} />
-        },
-        title: (opts) => {
-            if (isObject(opts.input) && Array.isArray(opts.input.parsed_cmd) && opts.input.parsed_cmd.length === 1) {
-                const parsed = opts.input.parsed_cmd[0]
-                if (isObject(parsed) && parsed.type === 'read' && typeof parsed.name === 'string') {
-                    return resolveDisplayPath(parsed.name, opts.metadata)
-                }
-            }
-            return opts.description ?? 'Terminal'
-        },
-        subtitle: (opts) => {
-            const command = getInputStringAny(opts.input, ['command', 'cmd'])
-            if (command) return command
-            if (isObject(opts.input) && Array.isArray(opts.input.command)) {
-                return opts.input.command.filter((part) => typeof part === 'string').join(' ')
-            }
-            return null
-        },
-        minimal: true
-    },
-    CodexPermission: {
-        icon: () => <QuestionIcon className={DEFAULT_ICON_CLASS} />,
-        title: (opts) => {
-            const tool = getInputStringAny(opts.input, ['tool'])
-            return tool ? `Permission: ${tool}` : 'Permission request'
-        },
-        subtitle: (opts) => getInputStringAny(opts.input, ['message', 'command']) ?? null,
-        minimal: true
-    },
     shell_command: {
         icon: () => <TerminalIcon className={DEFAULT_ICON_CLASS} />,
         title: (opts) => opts.description ?? 'Terminal',
@@ -241,48 +203,6 @@ export const knownTools: Record<string, {
             const newTodos = isObject(opts.result) && Array.isArray(opts.result.newTodos) ? opts.result.newTodos : null
             if (newTodos && newTodos.length > 0) return false
             return true
-        }
-    },
-    CodexReasoning: {
-        icon: () => <BulbIcon className={DEFAULT_ICON_CLASS} />,
-        title: (opts) => getInputStringAny(opts.input, ['title']) ?? 'Reasoning',
-        minimal: true
-    },
-    CodexPatch: {
-        icon: () => <FileDiffIcon className={DEFAULT_ICON_CLASS} />,
-        title: () => 'Apply changes',
-        subtitle: (opts) => {
-            if (isObject(opts.input) && isObject(opts.input.changes)) {
-                const files = Object.keys(opts.input.changes)
-                if (files.length === 0) return null
-                const first = files[0]
-                const display = resolveDisplayPath(first, opts.metadata)
-                const name = basename(display)
-                return files.length > 1 ? `${name} (+${files.length - 1})` : name
-            }
-            return null
-        },
-        minimal: true
-    },
-    CodexDiff: {
-        icon: () => <FileDiffIcon className={DEFAULT_ICON_CLASS} />,
-        title: () => 'Diff',
-        subtitle: (opts) => {
-            const unified = getInputStringAny(opts.input, ['unified_diff'])
-            if (!unified) return null
-            const lines = unified.split('\n')
-            for (const line of lines) {
-                if (line.startsWith('+++ b/') || line.startsWith('+++ ')) {
-                    const fileName = line.replace(/^\+\+\+ (b\/)?/, '')
-                    return fileName.split('/').pop() ?? fileName
-                }
-            }
-            return null
-        },
-        minimal: (opts) => {
-            const unified = getInputStringAny(opts.input, ['unified_diff'])
-            if (!unified) return true
-            return unified.length >= 2000 || countLines(unified) >= 50
         }
     },
     ExitPlanMode: {

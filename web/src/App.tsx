@@ -15,14 +15,12 @@ import { AppContextProvider } from '@/lib/app-context'
 import { fetchLatestMessages } from '@/lib/message-window-store'
 import { useAppGoBack } from '@/hooks/useAppGoBack'
 import { useTranslation } from '@/lib/use-translation'
-import { VoiceProvider } from '@/lib/voice-context'
 import { requireHubUrlForLogin } from '@/lib/runtime-config'
 import { LoginPrompt } from '@/components/LoginPrompt'
 import { InstallPrompt } from '@/components/InstallPrompt'
 import { OfflineBanner } from '@/components/OfflineBanner'
 import { SyncingBanner } from '@/components/SyncingBanner'
 import { ReconnectingBanner } from '@/components/ReconnectingBanner'
-import { VoiceErrorBanner } from '@/components/VoiceErrorBanner'
 import { LoadingState } from '@/components/LoadingState'
 import { ToastContainer } from '@/components/ToastContainer'
 import { ToastProvider, useToast } from '@/lib/toast-context'
@@ -336,17 +334,14 @@ function AppInner() {
 
     return (
         <AppContextProvider value={{ api, token, baseUrl }}>
-            <VoiceProvider>
-                <SyncingBanner isSyncing={isSyncing} />
-                <ReconnectingBanner isReconnecting={sseDisconnected && !isSyncing} />
-                <VoiceErrorBanner />
-                <OfflineBanner />
-                <div className="h-full flex flex-col">
-                    <Outlet />
-                </div>
-                <ToastContainer />
-                <InstallPrompt />
-            </VoiceProvider>
+            <SyncingBanner isSyncing={isSyncing} />
+            <ReconnectingBanner isReconnecting={sseDisconnected && !isSyncing} />
+            <OfflineBanner />
+            <div className="h-full flex flex-col">
+                <Outlet />
+            </div>
+            <ToastContainer />
+            <InstallPrompt />
         </AppContextProvider>
     )
 }

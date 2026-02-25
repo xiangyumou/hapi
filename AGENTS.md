@@ -6,17 +6,16 @@ Short guide for AI agents in this repo. Prefer progressive loading: start with t
 
 ## What is HAPI?
 
-Local-first platform for running AI coding agents (Claude Code, Codex, Gemini) with remote control via web/phone. CLI wraps agents and connects to hub; hub serves web app and handles real-time sync.
+Local-first platform for running Claude Code with remote control via web/phone. CLI wraps Claude Code and connects to hub; hub serves web app and handles real-time sync.
 
 ## Repo layout
 
 ```
-cli/     - CLI binary, agent wrappers, runner daemon
+cli/     - CLI binary, agent wrapper, runner daemon
 hub/     - HTTP API + Socket.IO + SSE + Telegram bot
 web/     - React PWA for remote control
 shared/  - Common types, schemas, utilities
 docs/    - VitePress documentation site
-website/ - Marketing site
 ```
 
 Bun workspaces; `shared` consumed by cli, hub, web.
@@ -29,14 +28,14 @@ Bun workspaces; `shared` consumed by cli, hub, web.
 │ (agent) │              │ (server)│              │  (PWA)  │
 └─────────┘              └─────────┘              └─────────┘
      │                        │                        │
-     ├─ Wraps Claude/Codex    ├─ SQLite persistence   ├─ TanStack Query
+     ├─ Wraps Claude Code     ├─ SQLite persistence   ├─ TanStack Query
      ├─ Socket.IO client      ├─ Session cache        ├─ SSE for updates
      └─ RPC handlers          ├─ RPC gateway          └─ assistant-ui
                               └─ Telegram bot
 ```
 
 **Data flow:**
-1. CLI spawns agent (claude/codex/gemini), connects to hub via Socket.IO
+1. CLI spawns Claude Code, connects to hub via Socket.IO
 2. Agent events → CLI → hub (socket `message` event) → DB + SSE broadcast
 3. Web subscribes to SSE `/api/events`, receives live updates
 4. User actions → Web → hub REST API → RPC to CLI → agent
@@ -72,8 +71,7 @@ bun run build:single-exe # All-in-one binary
 ### CLI (`cli/src/`)
 - `api/` - Hub connection (Socket.IO client, auth)
 - `claude/` - Claude Code integration (wrapper, hooks)
-- `codex/` - Codex mode integration
-- `agent/` - Multi-agent support (Gemini via ACP)
+- `agent/` - Agent lifecycle and session management
 - `runner/` - Background daemon for remote spawn
 - `commands/` - CLI subcommands (auth, runner, doctor)
 - `modules/` - Tool implementations (ripgrep, difftastic, git)

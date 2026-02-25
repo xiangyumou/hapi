@@ -5,21 +5,21 @@ import { join } from 'path';
 import { listSkills } from './skills';
 
 describe('skills', () => {
-    const originalCodexHome = process.env.CODEX_HOME;
-    let codexHome: string;
+    const originalClaudeConfigDir = process.env.CLAUDE_CONFIG_DIR;
+    let claudeConfigDir: string;
 
     beforeEach(async () => {
-        codexHome = await mkdtemp(join(tmpdir(), 'hapi-skills-'));
-        process.env.CODEX_HOME = codexHome;
+        claudeConfigDir = await mkdtemp(join(tmpdir(), 'hapi-skills-'));
+        process.env.CLAUDE_CONFIG_DIR = claudeConfigDir;
     });
 
     afterEach(async () => {
-        if (originalCodexHome === undefined) {
-            delete process.env.CODEX_HOME;
+        if (originalClaudeConfigDir === undefined) {
+            delete process.env.CLAUDE_CONFIG_DIR;
         } else {
-            process.env.CODEX_HOME = originalCodexHome;
+            process.env.CLAUDE_CONFIG_DIR = originalClaudeConfigDir;
         }
-        await rm(codexHome, { recursive: true, force: true });
+        await rm(claudeConfigDir, { recursive: true, force: true });
     });
 
     it('returns empty list when skills directory is missing', async () => {
@@ -28,7 +28,7 @@ describe('skills', () => {
     });
 
     it('lists only top-level skills and .system children', async () => {
-        const skillsRoot = join(codexHome, 'skills');
+        const skillsRoot = join(claudeConfigDir, 'skills');
         await mkdir(skillsRoot, { recursive: true });
 
         const amisDir = join(skillsRoot, 'amis');
@@ -78,7 +78,7 @@ describe('skills', () => {
     });
 
     it('falls back to directory name when frontmatter is missing', async () => {
-        const skillsRoot = join(codexHome, 'skills');
+        const skillsRoot = join(claudeConfigDir, 'skills');
         const fallbackDir = join(skillsRoot, 'no-frontmatter');
         await mkdir(fallbackDir, { recursive: true });
         await writeFile(join(fallbackDir, 'SKILL.md'), '# No Frontmatter\n');

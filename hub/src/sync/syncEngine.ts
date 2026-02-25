@@ -300,7 +300,7 @@ export class SyncEngine {
     async spawnSession(
         machineId: string,
         directory: string,
-        agent: 'claude' | 'codex' | 'gemini' | 'opencode' = 'claude',
+        agent: 'claude' = 'claude',
         model?: string,
         yolo?: boolean,
         sessionType?: 'simple' | 'worktree',
@@ -330,16 +330,7 @@ export class SyncEngine {
             return { type: 'error', message: 'Session metadata missing path', code: 'resume_unavailable' }
         }
 
-        const flavor = metadata.flavor === 'codex' || metadata.flavor === 'gemini' || metadata.flavor === 'opencode'
-            ? metadata.flavor
-            : 'claude'
-        const resumeToken = flavor === 'codex'
-            ? metadata.codexSessionId
-            : flavor === 'gemini'
-                ? metadata.geminiSessionId
-                : flavor === 'opencode'
-                    ? metadata.opencodeSessionId
-                    : metadata.claudeSessionId
+        const resumeToken = metadata.claudeSessionId
 
         if (!resumeToken) {
             return { type: 'error', message: 'Resume session ID unavailable', code: 'resume_unavailable' }
@@ -369,7 +360,7 @@ export class SyncEngine {
         const spawnResult = await this.rpcGateway.spawnSession(
             targetMachine.id,
             metadata.path,
-            flavor,
+            'claude',
             undefined,
             undefined,
             undefined,
